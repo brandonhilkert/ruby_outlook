@@ -248,6 +248,42 @@ module RubyOutlook
     end
 
     # token (string): access token
+    # id (string): The Id of the message to retrieve
+    # fields (array): An array of field names to include in results
+    # user (string): The user to make the call for. If nil, use the 'Me' constant.
+    def get_attachments_for_message(token, id, fields = nil)
+      request_url = "/api/v2.0/me/messages/#{id}/attachments"
+      request_params = nil
+
+      unless fields.nil?
+        request_params = { '$select' => fields.join(',') }
+      end
+
+      get_message_response = make_api_call "GET", request_url, token, request_params
+
+      JSON.parse(get_message_response)
+    end
+
+    # token (string): access token
+    # message_id (string): The Id of the message to retrieve
+    # attachment_id (string): The Id of the attachment to retrieve
+    # fields (array): An array of field names to include in results
+    # user (string): The user to make the call for. If nil, use the 'Me' constant.
+    def get_attachment(token, message_id, attachment_id, fields = nil)
+      request_url = "/api/v2.0/me/messages/#{message_id}/attachments/#{attachment_id}"
+      request_params = nil
+
+      unless fields.nil?
+        request_params = { '$select' => fields.join(',') }
+      end
+
+      get_message_response = make_api_call "GET", request_url, token, request_params
+
+      JSON.parse(get_message_response)
+    end
+
+
+    # token (string): access token
     # payload (hash): a JSON hash representing the contact entity
     # folder_id (string): The Id of the folder to create the message in.
     #                     If nil, message is created in the default drafts folder.
